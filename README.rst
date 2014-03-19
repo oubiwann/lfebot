@@ -10,7 +10,7 @@ LiffyBot
 Introduction
 ============
 
-LiffyBot is not really a seriosu endeavor, more of a nod to the stereotypical
+LiffyBot is not really a serious endeavor, more of a nod to the stereotypical
 IRC-bot-as-first-project thing than anything else. To be honest, though, the
 original impetus *was* a real use case: #erlang-lisp on IRC needed a bot.
 
