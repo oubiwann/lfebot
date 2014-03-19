@@ -33,8 +33,8 @@ Dependencies
 This project assumes that you have `rebar`_ installed somwhere in your
 ``$PATH``.
 
-This project depends upon the following, which installed to the ``deps``
-directory of this project when you run ``make deps``:
+This project depends upon the following, which are installed to the
+``deps`` directory of this project when you run ``make deps``:
 
 * `LFE`_ (Lisp Flavored Erlang; needed only to compile)
 * `lfeunit`_ (needed only to run the unit tests)
