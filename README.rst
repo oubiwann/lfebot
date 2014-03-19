@@ -4,15 +4,15 @@ LiffyBot
 
 *An IRC Bot in Lisp Flavored Erlang*
 
-.. image:: images/LiffyBot.png
+.. image:: images/LiffyBot-small-3.png
 
 
 Introduction
 ============
 
-LiffyBot is just a fun/silly project, more of a nod to the stereotypical
-IRC-bot-as-first-proect thing than anything else. To be honest, though, the
-original impetus was a real use case: #erlang-lisp on IRC needed a bot.
+LiffyBot is not really a seriosu endeavor, more of a nod to the stereotypical
+IRC-bot-as-first-project thing than anything else. To be honest, though, the
+original impetus *was* a real use case: #erlang-lisp on IRC needed a bot.
 
 ``*shrugs*``
 
