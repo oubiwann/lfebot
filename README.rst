@@ -1,11 +1,31 @@
-###########
-lfebot
-###########
+########
+LiffyBot
+########
+
+*An IRC Bot in Lisp Flavored Erlang*
+
+.. image:: images/LiffyBot.png
+
 
 Introduction
 ============
 
-Add content to me here!
+LiffyBot is just a fun/silly project, more of a nod to the stereotypical
+IRC-bot-as-first-proect thing than anything else. To be honest, though, the
+original impetus was a real use case: #erlang-lisp on IRC needed a bot.
+
+``*shrugs*``
+
+A quick scan of the github Erlang bot-space indicated that perhaps `erlbot`_
+was a good starting place. We'll try to make our way through that code, porting
+it to LFE and, maybe some day, running it in our Freenode channel ;-)
+
+``└[∵┌]└[ ∵ ]┘[┐∵]┘``
+
+But maybe not.
+
+``┗[© ♒ ©]┛ ︵ ┻━┻``
+
 
 Dependencies
 ------------
@@ -19,6 +39,7 @@ directory of this project when you run ``make deps``:
 * `LFE`_ (Lisp Flavored Erlang; needed only to compile)
 * `lfeunit`_ (needed only to run the unit tests)
 
+
 Installation
 ============
 
@@ -27,7 +48,7 @@ Just add it to your ``rebar.config`` deps:
 ```erlang
     {deps, [
         ...
-        {lfebot, ".*", {git, "git@github.com:YOURNAME/{{PROJECT}}.git", "master"}}
+        {lfebot, ".*", {git, "git@github.com:lfe/lfebot.git", "master"}}
       ]}.
 ```
 
@@ -39,13 +60,16 @@ And then do the usual:
     $ rebar compile
 ```
 
+
 Usage
 =====
 
 Add content to me here!
+
 
 .. Links
 .. -----
 .. _rebar: https://github.com/rebar/rebar
 .. _LFE: https://github.com/rvirding/lfe
 .. _lfeunit: https://github.com/lfe/lfeunit
+.. _erlbot: https://github.com/npwolf/erlbot
