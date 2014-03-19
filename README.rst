@@ -45,20 +45,20 @@ Installation
 
 Just add it to your ``rebar.config`` deps:
 
-```erlang
+.. code:: erlang
+
     {deps, [
         ...
         {lfebot, ".*", {git, "git@github.com:lfe/lfebot.git", "master"}}
       ]}.
-```
+
 
 And then do the usual:
 
-```bash
+.. code:: bash
 
     $ rebar get-deps
     $ rebar compile
-```
 
 
 Usage
