@@ -10,7 +10,7 @@ LiffyBot
 Introduction
 ============
 
-LiffyBot is not really a seriosu endeavor, more of a nod to the stereotypical
+LiffyBot is not really a serious endeavor, more of a nod to the stereotypical
 IRC-bot-as-first-project thing than anything else. To be honest, though, the
 original impetus *was* a real use case: #erlang-lisp on IRC needed a bot.
 
@@ -33,8 +33,8 @@ Dependencies
 This project assumes that you have `rebar`_ installed somwhere in your
 ``$PATH``.
 
-This project depends upon the following, which installed to the ``deps``
-directory of this project when you run ``make deps``:
+This project depends upon the following, which are installed to the
+``deps`` directory of this project when you run ``make deps``:
 
 * `LFE`_ (Lisp Flavored Erlang; needed only to compile)
 * `lfeunit`_ (needed only to run the unit tests)
@@ -45,20 +45,20 @@ Installation
 
 Just add it to your ``rebar.config`` deps:
 
-```erlang
+.. code:: erlang
+
     {deps, [
         ...
         {lfebot, ".*", {git, "git@github.com:lfe/lfebot.git", "master"}}
       ]}.
-```
+
 
 And then do the usual:
 
-```bash
+.. code:: bash
 
     $ rebar get-deps
     $ rebar compile
-```
 
 
 Usage
