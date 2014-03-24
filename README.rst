@@ -64,7 +64,65 @@ And then do the usual:
 Usage
 =====
 
-Add content to me here!
+
+Running
+-------
+
+If you'd like to run erl bot in dev mode (running in the foreground, logging
+everything to ``stdout``), do the following (you'll need to compile first):
+```bash
+    $ make compile
+    $ make dev
+```
+or
+```bash
+    $ made run
+```
+
+If you'd like to daemonize the process:
+```bash
+    $ make prod
+```
+or
+```bash
+    $ make daemon
+```
+
+
+Stopping
+--------
+
+If you're running in the foregrund, ``^C^C`` will bring you back to the OS
+shell.
+
+If you're running in daemonized mode:
+
+```bash
+    $ make stop
+```
+
+
+Configuring
+-----------
+
+TBD
+
+
+Development
+===========
+
+
+Contributing Patches
+--------------------
+
+TBD
+
+
+Creating Plugins
+----------------
+
+TBD
+
 
 
 .. Links
