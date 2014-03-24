@@ -42,13 +42,13 @@
 
 (defun setup ()
   (if (running?)
-    'skipped
+    #(skipped "Already running.")
     (let ((status (get-status)))
       (case status
         ('(ok ok ok)
           'ok)
         (_
-          status)))))
+          `#(error ,status))))))
 
 (defun get-section (section)
   (setup)
