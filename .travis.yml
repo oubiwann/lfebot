@@ -1,5 +1,5 @@
 language: erlang
-script: "make check"
+script: "make check-unit-with-deps"
 notifications:
   #irc: "irc.freenode.org#YOUR-PROJECT-CHANNEL"
   recipients:
