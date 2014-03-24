@@ -18,6 +18,9 @@ FINISH = -run init stop -noshell
 # ERL_LIB is for installation.
 ERL_LIBS = $(shell find $(DEPS) -maxdepth 1 -exec echo -n '{}:' \;|sed 's/:$$/:./'):$(TEST_OUT_DIR)
 
+get-erllibs:
+	@echo $(ERL_LIBS)
+
 get-version:
 	@echo
 	@echo "Getting version info ..."
