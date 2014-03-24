@@ -13,17 +13,17 @@
     (tuple 'local (server-name)) (MODULE) '()))
 
 (defun init (args)
-  (let* ((command-word (: lfebot-settings get '"lfebot" '"cmd-word"))
-         (irc-server (: lfebot-settings get '"lfebot" '"server"))
-         (irc-port (: lfebot-settings get '"lfebot" '"port"))
+  (let* ((command-word (: lfebot-settings get-value 'lfebot 'command-word))
+         (irc-server (: lfebot-settings get-value 'lfebot 'server))
+         (irc-port (: lfebot-settings get-value 'lfebot 'port))
          (start-order (list (child 'lfebot-router 'worker command-word)
                             (child 'lfebot-plugin-sup 'supervisor '())
                             (child 'lfebot-connector 'worker
                               (list irc-server irc-port)))))
     `#(ok #(#(one_for_one 5 10) ,start-order))))
 
-;; Helper function for declaring children of supervisor
 (defun child
+  "Helper function for declaring children of supervisor."
   ((mod 'supervisor '())
     `#(,mod #(,mod start_link ()) permanent 5000 supervisor (,mod)))
   ((mod type '())
