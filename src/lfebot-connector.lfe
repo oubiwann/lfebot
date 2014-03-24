@@ -21,6 +21,10 @@
 (defun server-name ()
   (MODULE))
 
+(defun reconnect-time ()
+  "30 seconds."
+  30000)
+
 ;;;===================================================================
 ;;; API
 ;;;===================================================================
@@ -42,9 +46,12 @@
 ;;;===================================================================
 ;;; gen_server callbacks
 ;;;===================================================================
-(defun init (args)
-  (tuple 'ok (make-state)))
-
+(defun init
+  (((list server port))
+    (process_flag 'trap_exit 'true)
+    (connect server port)
+    ; XXX use lager ... to give started message
+    (tuple ok (make-state server server port port))))
 
 (defun handle_call
   (((tuple 'test message) from state)
@@ -75,3 +82,7 @@
 (defun flush ()
   "Flush all messages so they dont queue up."
   'noop)
+
+(defun reconnect ()
+  ; XXX use lager here to give reconnecting message)
+  (: erlang send_after (reconnect-time)))
