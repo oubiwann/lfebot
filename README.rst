@@ -27,6 +27,18 @@ But maybe not.
 ``┗[© ♒ ©]┛ ︵ ┻━┻``
 
 
+Planned Features
+----------------
+
+* Channel logging.
+
+* Meeting minutes/notes.
+
+* Conversational silliness (Alice).
+
+* Other crazy AI stuff. Because.
+
+
 Dependencies
 ------------
 
