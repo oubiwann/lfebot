@@ -115,7 +115,7 @@ check-unit-only:
 	@echo "------------------"
 	@echo
 	ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
-	-eval "$(CASE_OPEN)  $(UNIT_TESTS) $(CASE_CLOSE)"
+	-eval "$(CASE_OPEN) $(UNIT_TESTS) $(CASE_CLOSE)"
 
 check-integration-only:
 	@echo
@@ -133,7 +133,7 @@ check-system-only:
 	@echo "--------------------"
 	@echo
 	@ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
-	-eval "case eunit:test({inparallel,[$(SYSTEM_TESTS) $(CASE_CLOSE)"
+	-eval "$(CASE_OPEN) $(SYSTEM_TESTS) $(CASE_CLOSE)"
 
 check-unit-with-deps: get-deps compile compile-tests check-unit-only
 check-unit: compile-no-deps compile-tests check-unit-only
@@ -150,7 +150,7 @@ check-all: get-deps compile-no-deps compile-tests check-unit-only \
 check: check-unit-with-deps
 
 push-all:
-	@echo "Pusing code to github ..."
+	@echo "Pushing code to github ..."
 	git push --all
 	git push upstream --all
 	git push --tags
