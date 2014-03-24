@@ -1,13 +1,13 @@
 include common.mk
 
-dev:
+dev: compile-no-deps
 	@echo "Running OTP app in the foreground ..."
 	@ERL_LIBS=$(ERL_LIBS) $(LFE) -eval "application:start('erlbot')" \
 	-noshell
 
 run: dev
 
-prod:
+prod: compile
 	@echo "Running OTP app in the background ..."
 	@ERL_LIBS=$(ERL_LIBS) $(LFE) -eval "application:start('lfebot')" \
 	-name erlbot@$${HOSTNAME} -setcookie `cat ~/.erlang.cookie` \

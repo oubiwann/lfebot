@@ -17,9 +17,22 @@ FINISH = -run init stop -noshell
 # Note that ERL_LIBS is for running this project in development and that
 # ERL_LIB is for installation.
 ERL_LIBS = $(shell find $(DEPS) -maxdepth 1 -exec echo -n '{}:' \;|sed 's/:$$/:./'):$(TEST_OUT_DIR)
+CLEAN_TEST_NAME=sed -e 's/.beam//' -e 's/^.eunit\///'
+QUOTE_TEST=awk '{print "\x27" $$1 "\x27"}'
+STRIP_NEWLINES=sed ':a;N;$!ba;s/\n/ /g'
+UNIT_TESTS=$(shell ls .eunit/unit*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
+INTEGRATION_TESTS=$(ls .eunit/integration*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
+SYSTEM_TESTS=$(shell ls .eunit/system*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
+CASE_OPEN=case eunit:test({inparallel,[
+CASE_CLOSE=]},[verbose]) of ok -> halt(0); _ -> halt(127) end
 
 get-erllibs:
 	@echo $(ERL_LIBS)
+
+get-tests:
+	@echo "Unit tests: $(UNIT_TESTS)"
+	@echo "Integration tests: $(INTEGRATION_TESTS)"
+	@echo "System tests: $(SYSTEM_TESTS)"
 
 get-version:
 	@echo
@@ -101,13 +114,8 @@ check-unit-only:
 	@echo "Running unit tests ..."
 	@echo "------------------"
 	@echo
-	@ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
-	-eval "eunit:test({inparallel,[\
-		`ls .eunit/unit*| \
-		sed -e 's/.beam//' -e 's/^.eunit\///'| \
-		awk '{print "\x27" $$1 "\x27"}'| \
-		sed ':a;N;$!ba;s/\n/ /g'`]},[verbose])" \
-	-s init stop
+	ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
+	-eval "$(CASE_OPEN)  $(UNIT_TESTS) $(CASE_CLOSE)"
 
 check-integration-only:
 	@echo
@@ -116,12 +124,7 @@ check-integration-only:
 	@echo "-------------------------"
 	@echo
 	@ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
-	-eval "eunit:test({inparallel,[\
-		`ls .eunit/integration*| \
-		sed -e 's/.beam//' -e 's/^.eunit\///'| \
-		awk '{print "\x27" $$1 "\x27"}'| \
-		sed ':a;N;$!ba;s/\n/ /g'`]},[verbose])" \
-	-s init stop
+	-eval "$(CASE_OPEN) $(FUNCTIONAL_TESTS) $(CASE_CLOSE)"
 
 check-system-only:
 	@echo
@@ -130,15 +133,10 @@ check-system-only:
 	@echo "--------------------"
 	@echo
 	@ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
-	-eval "eunit:test({inparallel,[\
-		`ls .eunit/system*| \
-		sed -e 's/.beam//' -e 's/^.eunit\///'| \
-		awk '{print "\x27" $$1 "\x27"}'| \
-		sed ':a;N;$!ba;s/\n/ /g'`]},[verbose])" \
-	-s init stop
+	-eval "case eunit:test({inparallel,[$(SYSTEM_TESTS) $(CASE_CLOSE)"
 
-check-unit-with-deps: compile compile-tests check-unit-only
-check-unit: get-deps compile-no-deps compile-tests check-unit-only
+check-unit-with-deps: get-deps compile compile-tests check-unit-only
+check-unit: compile-no-deps compile-tests check-unit-only
 check-integration: compile compile-tests check-integration-only
 check-system: compile compile-tests check-system-only
 check-all-with-deps: compile compile-tests check-unit-only \
@@ -149,8 +147,7 @@ check-all: get-deps compile-no-deps compile-tests check-unit-only \
 # XXX all the custom test checkers above have an issue, described here:
 # 	https://github.com/lfe/lfetool/issues/14
 # until that gets fixed, use the target below for Travis CI
-check: compile compile-tests
-	@rebar eunit verbose=1 skip_deps=true
+check: check-unit-with-deps
 
 push-all:
 	@echo "Pusing code to github ..."
