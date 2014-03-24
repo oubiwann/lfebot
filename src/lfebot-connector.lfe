@@ -34,7 +34,7 @@
 
 (defun send (line)
   (: gen_server cast
-     (server-name) (tuple 'test message)))
+     (server-name) `#(raw_send ,line)))
 
 (defun stop-bot ()
   (: gen_server call (server-name) 'terminate))
