@@ -6,3 +6,4 @@ deps
 debug-*
 ebin/*
 bin/expm
+etc/user.conf
