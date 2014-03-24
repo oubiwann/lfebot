@@ -82,23 +82,25 @@ Running
 
 If you'd like to run erl bot in dev mode (running in the foreground, logging
 everything to ``stdout``), do the following (you'll need to compile first):
-```bash
+.. code:: bash
     $ make compile
     $ make dev
-```
+
 or
-```bash
+
+.. code:: bash
     $ made run
-```
+
 
 If you'd like to daemonize the process:
-```bash
+
+.. code:: bash
     $ make prod
-```
+
 or
-```bash
+.. code:: bash
+
     $ make daemon
-```
 
 
 Stopping
