@@ -33,7 +33,7 @@
 ;;;===================================================================
 (defun start_link
   (((list server port))
-    (: gen_server start_link
+    (gen_server:start_link
        (tuple 'local (server-name)) (MODULE) `(,server ,port) '())))
 
 (defun connect (host port)
@@ -41,22 +41,22 @@
                               #(packet line)
                               #(keepalive true))))
     ; XXX replace with lager call
-    (: io format '"[~s] Connecting to ~s:~p~n" (list (MODULE) host port))
-    (case (: gen_tcp connect host port tcp-options)
+    (io:format '"[~s] Connecting to ~s:~p~n" (list (MODULE) host port))
+    (case (gen_tcp:connect host port tcp-options)
       ((tuple 'ok socket)
-        (: gen_server cast (server-name) `#(new_sock ,socket))
-        (: lfebot-router connected)
+        (gen_server:cast (server-name) `#(new_sock ,socket))
+        (lfebot-router:connected)
       ((tuple 'error reason)
         ; XXX replace with lager call
-        (: io format '"[~s] Error connecting to ~s:~p Reason: ~p~n"
+        (io:format '"[~s] Error connecting to ~s:~p Reason: ~p~n"
                      (list (MODULE) host port reason)))))))
 
 (defun send (line)
-  (: gen_server cast
+  (gen_server:cast
      (server-name) `#(raw_send ,line)))
 
 (defun stop-bot ()
-  (: gen_server call (server-name) 'terminate))
+  (gen_server:call (server-name) 'terminate))
 
 ;;;===================================================================
 ;;; gen_server callbacks
@@ -66,7 +66,7 @@
     (process_flag 'trap_exit 'true)
     (connect server port)
     ; XXX use lager ... to give started message
-    (: io format '"[~s] Started~n" (MODULE))
+    (io:format '"[~s] Started~n" (MODULE))
     (tuple 'ok (make-state server server port port))))
 
 (defun handle_call
@@ -76,24 +76,24 @@
 (defun handle_cast
   (((tuple 'new_sock socket) state)
     ; XXX replace with lager call
-    (: io format '"[~w] New Sock~n" (list socket))
+    (io:format '"[~w] New Sock~n" (list socket))
     (tuple 'noreply (set-state-socket state socket)))
   (((tuple 'raw_send message) (= state (tuple 'state _ _ socket)))
     ; XXX replace with lager call
-    (: io format '"[~w] Raw send: ~p~n" (list socket message))
-    (: gen_tcp send socket message))
+    (io:format '"[~w] Raw send: ~p~n" (list socket message))
+    (gen_tcp:send socket message))
   ((data (= state (tuple 'state _ _ socket)))
     ; XXX replace with lager call
-    (: io format '"[~w] Unknown cast: ~p~n" (list socket message))
+    (io:format '"[~w] Unknown cast: ~p~n" (list socket message))
     `#(noreply ,state)))
 
 (defun handle_info (info state)
   (((tuple 'tcp _ data) state)
-    (: lfebot-router receive-raw data)
+    (lfebot-router:receive-raw data)
     `#(noreply ,state))
   (((tuple 'tcp_closed socket) state)
-    (: io format '"[~w] Disconnected.~n" (list socket))
-    (: lfebot-router disconnected)
+    (io:format '"[~w] Disconnected.~n" (list socket))
+    (lfebot-router:disconnected)
     (flush)
     (reconnect)
     `#(noreply ,state))
@@ -102,17 +102,17 @@
     (connect server port)
     `#(noreply ,state))
   ((data (= state (tuple 'state _ _ socket)))
-    (: io format '"[~w] Unexpected message: ~p~n" (list socket data))
+    (io:format '"[~w] Unexpected message: ~p~n" (list socket data))
     `#(noreply ,state)))
 
 (defun terminate
   ((reason (= state (tuple 'state _ _ socket)))
-    (: io format '"[~s] Shutdown Started Reason: ~p~n" (list (MODULE) reason))
-    (let* ((fact (binary (: lfebot-facts get-random)))
+    (io:format '"[~s] Shutdown Started Reason: ~p~n" (list (MODULE) reason))
+    (let* ((fact (binary (lfebot-facts:get-random)))
            (message (list (binary "QUIT: ") fact endline)))
-      (: gen_tcp send socket message)
-      (: gen_tcp close socket)
-      (: io format '"[~s] Shutdown Complete.~n" (list (MODULE)))
+      (gen_tcp:send socket message)
+      (gen_tcp:close socket)
+      (io:format '"[~s] Shutdown Complete.~n" (list (MODULE)))
       'ok)))
 
 (defun code_change (old-version state extra)
@@ -127,6 +127,6 @@
 
 (defun reconnect ()
   ; XXX use lager here to give reconnecting message
-  (: io format '"Waiting ~p seconds before reconncting~n"
+  (io:format '"Waiting ~p seconds before reconncting~n"
                (list (reconnect-time)))
-  (: erlang send_after (reconnect-time)))
+  (erlang:send_after (reconnect-time)))
