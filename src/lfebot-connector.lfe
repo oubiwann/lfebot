@@ -23,7 +23,7 @@
 
 (defun reconnect-time ()
   "30 seconds."
-  30000)
+  (* 30 1000))
 
 (defun endline ()
   (binary "\r\n"))
@@ -45,11 +45,11 @@
     (case (gen_tcp:connect host port tcp-options)
       ((tuple 'ok socket)
         (gen_server:cast (server-name) `#(new_sock ,socket))
-        (lfebot-router:connected)
+        (lfebot-router:connected))
       ((tuple 'error reason)
         ; XXX replace with lager call
         (io:format '"[~s] Error connecting to ~s:~p Reason: ~p~n"
-                     (list (MODULE) host port reason)))))))
+                     (list (MODULE) host port reason))))))
 
 (defun send (line)
   (gen_server:cast
@@ -84,10 +84,10 @@
     (gen_tcp:send socket message))
   ((data (= state (tuple 'state _ _ socket)))
     ; XXX replace with lager call
-    (io:format '"[~w] Unknown cast: ~p~n" (list socket message))
+    (io:format '"[~w] Unknown cast: ~p~n" (list socket data))
     `#(noreply ,state)))
 
-(defun handle_info (info state)
+(defun handle_info
   (((tuple 'tcp _ data) state)
     (lfebot-router:receive-raw data)
     `#(noreply ,state))
@@ -108,8 +108,8 @@
 (defun terminate
   ((reason (= state (tuple 'state _ _ socket)))
     (io:format '"[~s] Shutdown Started Reason: ~p~n" (list (MODULE) reason))
-    (let* ((fact (binary (lfebot-facts:get-random)))
-           (message (list (binary "QUIT: ") fact endline)))
+    (let* ((fact (lfebot-facts:get-random))
+           (message (list (binary "QUIT: ") fact (endline))))
       (gen_tcp:send socket message)
       (gen_tcp:close socket)
       (io:format '"[~s] Shutdown Complete.~n" (list (MODULE)))
