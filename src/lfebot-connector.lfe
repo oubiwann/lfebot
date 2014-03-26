@@ -25,6 +25,9 @@
   "30 seconds."
   30000)
 
+(defun endline ()
+  (binary "\r\n"))
+
 ;;;===================================================================
 ;;; API
 ;;;===================================================================
@@ -85,13 +88,35 @@
     `#(noreply ,state)))
 
 (defun handle_info (info state)
-  (tuple 'noreply state))
+  (((tuple 'tcp _ data) state)
+    (: lfebot-router receive-raw data)
+    `#(noreply ,state))
+  (((tuple 'tcp_closed socket) state)
+    (: io format '"[~w] Disconnected.~n" (list socket))
+    (: lfebot-router disconnected)
+    (flush)
+    (reconnect)
+    `#(noreply ,state))
+  (((tuple connect) (= state (tuple 'state server port _)))
+    (flush)
+    (connect server port)
+    `#(noreply ,state))
+  ((data (= state (tuple 'state _ _ socket)))
+    (: io format '"[~w] Unexpected message: ~p~n" (list socket data))
+    `#(noreply ,state)))
 
-(defun terminate (reason state)
-  'ok)
+(defun terminate
+  ((reason (= state (tuple 'state _ _ socket)))
+    (: io format '"[~s] Shutdown Started Reason: ~p~n" (list (MODULE) reason))
+    (let* ((fact (binary (: lfebot-facts get-random)))
+           (message (list (binary "QUIT: ") fact endline)))
+      (: gen_tcp send socket message)
+      (: gen_tcp close socket)
+      (: io format '"[~s] Shutdown Complete.~n" (list (MODULE)))
+      'ok)))
 
 (defun code_change (old-version state extra)
-  (tuple 'ok state))
+  `#(ok ,state))
 
 ;;;===================================================================
 ;;; Internal functions
