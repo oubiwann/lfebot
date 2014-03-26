@@ -4,7 +4,7 @@
           (stop 1)))
 
 (defun start (type args)
-  (let ((result (: lfebot-sup start_link)))
+  (let ((result (lfebot-sup:start_link)))
     (case result
       ((tuple 'ok pid)
         result)

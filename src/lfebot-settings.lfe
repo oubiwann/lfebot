@@ -5,12 +5,12 @@
   'lfebot)
 
 (defun get-apps ()
-  (: lists map
+  (lists:map
     (lambda (x) (element 1 x))
-    (: application loaded_applications)))
+    (application:loaded_applications)))
 
 (defun register ()
-  (let ((result (: econfig register_config
+  (let ((result (econfig:register_config
                   (config-name)
                   '("etc/lfebot.conf" "etc/user.conf")
                   '(autoreload))))
@@ -21,8 +21,8 @@
         result))))
 
 (defun start-config ()
-  `(,(: application start 'gproc)
-    ,(: application start 'econfig)))
+  `(,(application:start 'gproc)
+    ,(application:start 'econfig)))
 
 (defun get-status ()
   (let ((`(,gproc-status ,econfig-status) (start-config))
@@ -30,10 +30,10 @@
     `(,gproc-status ,econfig-status ,register-status)))
 
 (defun get-running ()
-  (: sets to_list
-    (: sets intersection
-      (: sets from_list (get-apps))
-      (: sets from_list '(econfig gproc)))))
+  (sets:to_list
+    (sets:intersection
+      (sets:from_list (get-apps))
+      (sets:from_list '(econfig gproc)))))
 
 (defun running? ()
   (case (get-running)
@@ -52,8 +52,8 @@
 
 (defun get-section (section)
   (setup)
-  (: econfig get_value (config-name) section))
+  (econfig:get_value (config-name) section))
 
 (defun get-value (section key)
   (setup)
-  (: econfig get_value (config-name) section key))
+  (econfig:get_value (config-name) section key))

@@ -9,13 +9,13 @@
   (MODULE))
 
 (defun start_link ()
-  (: supervisor start_link
+  (supervisor:start_link
     (tuple 'local (server-name)) (MODULE) '()))
 
 (defun init (args)
-  (let* ((command-word (: lfebot-settings get-value 'lfebot 'command-word))
-         (irc-server (: lfebot-settings get-value 'lfebot 'server))
-         (irc-port (: lfebot-settings get-value 'lfebot 'port))
+  (let* ((command-word (lfebot-settings:get-value 'lfebot 'command-word))
+         (irc-server (lfebot-settings:get-value 'lfebot 'server))
+         (irc-port (lfebot-settings:get-value 'lfebot 'port))
          (start-order (list (child 'lfebot-router 'worker command-word)
                             (child 'lfebot-plugin-sup 'supervisor '())
                             (child 'lfebot-connector 'worker

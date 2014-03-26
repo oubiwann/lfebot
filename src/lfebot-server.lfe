@@ -22,15 +22,15 @@
 ;;; API
 ;;;===================================================================
 (defun start_link ()
-  (: gen_server start_link
+  (gen_server:start_link
      (tuple 'local (server-name)) (MODULE) '() '()))
 
 (defun test-call (message)
-  (: gen_server call
+  (gen_server:call
      (server-name) (tuple 'test message)))
 
 (defun test-cast (message)
-  (: gen_server cast
+  (gen_server:cast
      (server-name) (tuple 'test message)))
 
 ;;;===================================================================
@@ -42,14 +42,14 @@
 
 (defun handle_call
   (((tuple 'test message) from state)
-    (: lfe_io format '"Call: ~p~n" (list message))
+    (lfe_io:format '"Call: ~p~n" (list message))
     (tuple 'reply 'ok state))
   ((request from state)
     (tuple 'reply 'ok state)))
 
 (defun handle_cast
   (((tuple 'test message) state)
-    (: lfe_io format '"Cast: ~p~n" (list message))
+    (lfe_io:format '"Cast: ~p~n" (list message))
     (tuple 'noreply state))
   ((message state)
     (tuple 'noreply state)))
