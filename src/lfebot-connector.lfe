@@ -123,7 +123,12 @@
 ;;;===================================================================
 (defun flush ()
   "Flush all messages so they dont queue up."
-  'noop)
+  (receive
+    (_
+      (io:format '"Flushing...~n" '())
+      (flush))
+    (after 0
+      'ok)))
 
 (defun reconnect ()
   ; XXX use lager here to give reconnecting message
