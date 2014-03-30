@@ -19,9 +19,9 @@ FINISH = -run init stop -noshell
 ERL_LIBS = $(shell find $(DEPS) -maxdepth 1 -exec echo -n '{}:' \;|sed 's/:$$/:./'):$(TEST_OUT_DIR)
 CLEAN_TEST_NAME=sed -e 's/.beam//' -e 's/^.eunit\///'
 QUOTE_TEST=awk '{print "\x27" $$1 "\x27"}'
-STRIP_NEWLINES=sed ':a;N;$!ba;s/\n/ /g'
+STRIP_NEWLINES=tr '\n' ','|sed 's/,$$//'
 UNIT_TESTS=$(shell ls .eunit/unit*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
-INTEGRATION_TESTS=$(ls .eunit/integration*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
+INTEGRATION_TESTS=$(shell ls .eunit/integration*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
 SYSTEM_TESTS=$(shell ls .eunit/system*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES))
 CASE_OPEN=case eunit:test({inparallel,[
 CASE_CLOSE=]},[verbose]) of ok -> halt(0); _ -> halt(127) end
@@ -30,7 +30,9 @@ get-erllibs:
 	@echo $(ERL_LIBS)
 
 get-tests:
-	@echo "Unit tests: $(UNIT_TESTS)"
+	@echo "Unit tests: "
+	@echo "\tCommand: ls .eunit/unit*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES)"
+	@echo "\tOutput: $(UNIT_TESTS)"
 	@echo "Integration tests: $(INTEGRATION_TESTS)"
 	@echo "System tests: $(SYSTEM_TESTS)"
 
@@ -114,7 +116,7 @@ check-unit-only:
 	@echo "Running unit tests ..."
 	@echo "------------------"
 	@echo
-	ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
+	@ERL_LIBS=$(ERL_LIBS) erl -pa .eunit -noshell \
 	-eval "$(CASE_OPEN) $(UNIT_TESTS) $(CASE_CLOSE)"
 
 check-integration-only:
