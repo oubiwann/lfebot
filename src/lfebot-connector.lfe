@@ -13,17 +13,14 @@
           (terminate 2)
           (code_change 3)))
 
-(defrecord state
-  server
-  port
-  socket)
+(include-lib "include/records.lfe")
 
 (defun server-name ()
   (MODULE))
 
 (defun reconnect-time ()
   "30 seconds."
-  (* 30 1000))
+  (* (lfebot:settings get-value 'lfebot 'reconnect-seconds) 1000))
 
 (defun endline ()
   (binary "\r\n"))
