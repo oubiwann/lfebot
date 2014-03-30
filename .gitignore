@@ -8,3 +8,4 @@ ebin/*
 bin/expm
 etc/user.conf
 *.dump
+.rebar/*
