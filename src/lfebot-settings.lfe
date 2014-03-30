@@ -1,9 +1,6 @@
 (defmodule lfebot-settings
   (export all))
 
-(defun config-name ()
-  'lfebot)
-
 (defun get-apps ()
   (lists:map
     (lambda (x) (element 1 x))
@@ -11,7 +8,7 @@
 
 (defun register ()
   (let ((result (econfig:register_config
-                  (config-name)
+                  (lfebot-const:config-name)
                   '("etc/lfebot.conf" "etc/user.conf")
                   '(autoreload))))
     (case result
@@ -52,8 +49,8 @@
 
 (defun get-section (section)
   (setup)
-  (econfig:get_value (config-name) section))
+  (econfig:get_value (lfebot-const:config-name) section))
 
 (defun get-value (section key)
   (setup)
-  (econfig:get_value (config-name) section key))
+  (econfig:get_value (lfebot-const:config-name) section key))

@@ -1,6 +1,9 @@
 (defmodule lfebot-const
   (export all))
 
+(defun config-name ()
+  'lfebot)
+
 (defun endline ()
   (binary "\r\n"))
 
