@@ -18,13 +18,6 @@
 (defun server-name ()
   (MODULE))
 
-(defun reconnect-time ()
-  "30 seconds."
-  (* (lfebot:settings get-value 'lfebot 'reconnect-seconds) 1000))
-
-(defun endline ()
-  (binary "\r\n"))
-
 ;;;===================================================================
 ;;; API
 ;;;===================================================================
@@ -106,7 +99,7 @@
   ((reason (= state (tuple 'state _ _ socket)))
     (io:format '"[~s] Shutdown Started Reason: ~p~n" (list (MODULE) reason))
     (let* ((fact (lfebot-facts:get-random))
-           (message (list (binary "QUIT: ") fact (endline))))
+           (message (list (binary "QUIT: ") fact (lfebot-const:endline))))
       (gen_tcp:send socket message)
       (gen_tcp:close socket)
       (io:format '"[~s] Shutdown Complete.~n" (list (MODULE)))
@@ -130,5 +123,5 @@
 (defun reconnect ()
   ; XXX use lager here to give reconnecting message
   (io:format '"Waiting ~p seconds before reconncting~n"
-               (list (reconnect-time)))
-  (erlang:send_after (reconnect-time)))
+               (list (lfebot-const:reconnect-time)))
+  (erlang:send_after (lfebot-const:reconnect-time)))
