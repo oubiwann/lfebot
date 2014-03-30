@@ -9,7 +9,6 @@
 
 (deftest code-change
   (is-equal
-    ;; XXX This unit test fails by default -- fix it!
     #(ok "state")
     (: lfebot-server code_change
        '"old version"
