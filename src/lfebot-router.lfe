@@ -30,21 +30,62 @@
 (defun add-subscriber (pid)
   'noop)
 
-(defun connect ()
+(defun connect (_ _)
   'noop)
 
+(defun format-irc-line (_ _)
+  'noop)
+
+(defun remove-subscriber (_ _ _)
+  'noop)
+
+(defun send (_)
+  'noop)
+
+(defun start_link (_)
+  'noop)
+
+(defun stop-bot ()
+  'noop)
+
+(defun timestamp ()
+  'noop)
+
+(defun timestamp (_)
+  'noop)
+
+;;;===================================================================
+;;; API, but don't call; really for internal use
+;;;===================================================================
 (defun connected ()
-  'noop)
-
-(defun receive-raw ()
   'noop)
 
 (defun disconnected ()
   'noop)
 
+(defun receive-raw (_)
+  'noop)
+
 ;;;===================================================================
 ;;; gen_server callbacks
 ;;;===================================================================
+(defun init (_)
+  'noop)
+
+(defun handle_call (_ _ _)
+  'noop)
+
+(defun handle_cast (_ _)
+  'noop)
+
+(defun handle_info (_ _)
+  'noop)
+
+(defun terminate (_ _)
+  'noop)
+
+(defun code_change (_ _ _)
+  'noop)
 
 ;;;===================================================================
 ;;; Internal functions
