@@ -54,3 +54,9 @@
 (defun get-value (section key)
   (setup)
   (econfig:get_value (lfebot-const:config-name) section key))
+
+(defun get-integer (section key)
+  (list_to_integer (get-value section key)))
+
+(defun get-atom (section key)
+  (list_to_atom (get-value section key)))
