@@ -2,9 +2,10 @@
   (export all))
 
 (defun get-apps ()
-  (lists:map
-    (lambda (x) (element 1 x))
-    (application:loaded_applications)))
+  (lists:sort
+    (lists:map
+      (lambda (x) (element 1 x))
+      (application:loaded_applications))))
 
 (defun register ()
   (let ((result (econfig:register_config
@@ -27,10 +28,11 @@
     `(,gproc-status ,econfig-status ,register-status)))
 
 (defun get-running ()
-  (sets:to_list
-    (sets:intersection
-      (sets:from_list (get-apps))
-      (sets:from_list '(econfig gproc)))))
+  (lists:sort
+    (sets:to_list
+      (sets:intersection
+        (sets:from_list (get-apps))
+        (sets:from_list '(econfig gproc))))))
 
 (defun running? ()
   (case (get-running)
