@@ -9,6 +9,7 @@ LFE = $(LFE_DIR)/bin/lfe
 LFEC = $(LFE_DIR)/bin/lfec
 LFE_UTILS_DIR = $(DEPS)/lfe-utils
 LFEUNIT_DIR = $(DEPS)/lfeunit
+LFETOOL=/usr/local/bin/lfetool
 SOURCE_DIR = ./src
 OUT_DIR = ./ebin
 TEST_DIR = ./test
@@ -17,6 +18,11 @@ FINISH = -run init stop -noshell
 # Note that ERL_LIBS is for running this project in development and that
 # ERL_LIB is for installation.
 ERL_LIBS = $(shell find $(DEPS) -maxdepth 1 -exec echo -n '{}:' \;|sed 's/:$$/:./'):$(TEST_OUT_DIR)
+PATH=.:$(PATH)
+
+$(LFETOOL):
+	curl -o ./lfetool https://raw.github.com/lfe/lfetool/master/lfetool
+	chmod 755 ./lfetool
 
 get-erllibs:
 	@echo $(ERL_LIBS)
@@ -118,6 +124,8 @@ check-all: get-deps compile-no-deps
 	@lfetool tests all
 
 check: check-unit-with-deps
+
+check-travis: $(LFETOOL) check
 
 push-all:
 	@echo "Pushing code to github ..."
