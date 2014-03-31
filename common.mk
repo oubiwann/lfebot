@@ -114,8 +114,8 @@ check-integration: compile check-integration-only
 check-system: compile check-system-only
 check-all-with-deps: compile check-unit-only check-integration-only \
 	check-system-only
-check-all: get-deps compile-no-deps check-unit-only check-integration-only \
-	check-system-only
+check-all: get-deps compile-no-deps
+	@lfetool tests all
 
 check: check-unit-with-deps
 
