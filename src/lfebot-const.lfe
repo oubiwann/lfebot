@@ -9,4 +9,4 @@
 
 (defun reconnect-time ()
   "30 seconds."
-  (* (lfebot-settings:get-value 'lfebot 'reconnect-seconds) 1000))
+  (* (lfebot-settings:get-integer 'lfebot 'reconnect-seconds) 1000))
