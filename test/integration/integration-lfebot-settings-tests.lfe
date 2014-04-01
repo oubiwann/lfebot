@@ -49,4 +49,3 @@
 
 (deftest get-integer
   (is-equal 6667 (lfebot-settings:get-integer 'lfebot 'port)))
-
