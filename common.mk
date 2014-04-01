@@ -27,13 +27,6 @@ $(LFETOOL):
 get-erllibs:
 	@echo $(ERL_LIBS)
 
-get-tests:
-	@echo "Unit tests: "
-	@echo "\tCommand: ls .eunit/unit*|$(CLEAN_TEST_NAME)|$(QUOTE_TEST)|$(STRIP_NEWLINES)"
-	@echo "\tOutput: $(UNIT_TESTS)"
-	@echo "Integration tests: $(INTEGRATION_TESTS)"
-	@echo "System tests: $(SYSTEM_TESTS)"
-
 get-version:
 	@echo
 	@echo "Getting version info ..."
