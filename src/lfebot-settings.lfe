@@ -1,3 +1,6 @@
+;; XXX perhaps generalized versions of many of these functions would be
+;; appropriate for lfe-utils? I can think of other instances where I'd want to
+;; check to see what's running, set things up based on running criteria, etc.
 (defmodule lfebot-settings
   (export all))
 
