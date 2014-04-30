@@ -21,7 +21,7 @@ ERL_LIBS = $(shell find $(DEPS) -maxdepth 1 -exec echo -n '{}:' \;|sed 's/:$$/:.
 SCRIPT_PATH=.:$(PATH)
 
 $(LFETOOL):
-	curl -o ./lfetool https://raw.github.com/lfe/lfetool/master/lfetool
+	curl -L -o ./lfetool https://raw.github.com/lfe/lfetool/master/lfetool
 	chmod 755 ./lfetool
 
 get-erllibs:
