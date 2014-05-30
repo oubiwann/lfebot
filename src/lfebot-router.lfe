@@ -4,7 +4,7 @@
   (export (add-subscriber 1)
           (connect 2)
           (format-irc-line 2)
-          (remove-subscriber 3)
+          (remove-subscriber 1)
           (send 1)
           (start_link 1)
           (stop-bot 0)
@@ -28,7 +28,8 @@
 ;;; API
 ;;;===================================================================
 (defun add-subscriber (pid)
-  'noop)
+  (erlang:monitor 'process pid)
+  (gen_server:call 'bot-router `#(add-subscriber ,pid)))
 
 (defun connect (_ _)
   'noop)
@@ -36,8 +37,8 @@
 (defun format-irc-line (_ _)
   'noop)
 
-(defun remove-subscriber (_ _ _)
-  'noop)
+(defun remove-subscriber (pid)
+  (gen_server:call 'bot-router `#(remove-subscriber ,pid)))
 
 (defun send (_)
   'noop)
@@ -49,10 +50,14 @@
   'noop)
 
 (defun timestamp ()
-  'noop)
+  (timestamp (now)))
 
-(defun timestamp (_)
-  'noop)
+(defun timestamp (time)
+  (let* (((tuple (tuple year mon day)
+                 (tuple hour min sec)) (calendar:now_to_local_time time))
+         (stamp (io_lib:format "~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w"
+                               (list year mon day hour min sec))))
+    (list_to_binary stamp)))
 
 ;;;===================================================================
 ;;; API, but don't call; really for internal use
