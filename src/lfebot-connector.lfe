@@ -57,7 +57,7 @@
     (connect server port)
     ; XXX use lager ... to give started message
     (io:format '"[~s] Started~n" (MODULE))
-    (tuple 'ok (make-state server server port port))))
+    (tuple 'ok (make-conn-state server server port port))))
 
 (defun handle_call
   (('terminate from state)
@@ -67,7 +67,7 @@
   (((tuple 'new_sock socket) state)
     ; XXX replace with lager call
     (io:format '"[~w] New Sock~n" (list socket))
-    (tuple 'noreply (set-state-socket state socket)))
+    (tuple 'noreply (set-conn-state-socket state socket)))
   (((tuple 'raw_send message) (= state (tuple 'state _ _ socket)))
     ; XXX replace with lager call
     (io:format '"[~w] Raw send: ~p~n" (list socket message))

@@ -70,7 +70,7 @@
 ;;; gen_server callbacks
 ;;;===================================================================
 (defun init (cmd-word)
-  #(ok (make-state )))
+  `#(ok ,(make-router-state cmd-word (list_to_binary cmd-word))))
 
 (defun handle_call (_ _ _)
   'noop)

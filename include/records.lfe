@@ -1,5 +1,5 @@
 ;; Used in lfebot-connector
-(defrecord bot-state
+(defrecord conn-state
   server
   port
   socket)
