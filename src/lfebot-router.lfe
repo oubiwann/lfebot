@@ -42,8 +42,8 @@
 (defun send (_)
   'noop)
 
-(defun start_link (_)
-  'noop)
+(defun start_link (cmd-word)
+  (gen_server:start_link #(local bot-router) (MODULE) (list cmd-word) '()))
 
 (defun stop-bot ()
   'noop)
@@ -69,8 +69,8 @@
 ;;;===================================================================
 ;;; gen_server callbacks
 ;;;===================================================================
-(defun init (_)
-  'noop)
+(defun init (cmd-word)
+  #(ok (make-state )))
 
 (defun handle_call (_ _ _)
   'noop)
