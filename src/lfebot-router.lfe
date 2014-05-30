@@ -3,13 +3,10 @@
   ;; API
   (export (add-subscriber 1)
           (connect 2)
-          (format-irc-line 2)
           (remove-subscriber 1)
           (send 1)
           (start_link 1)
           (stop-bot 0)
-          (timestamp 0)
-          (timestamp 1)
           ;; Don't call the following unless you really know what you're doing
           (connected 0)
           (disconnected 0)
@@ -34,9 +31,6 @@
 (defun connect (_ _)
   'noop)
 
-(defun format-irc-line (_ _)
-  'noop)
-
 (defun remove-subscriber (pid)
   (gen_server:call 'bot-router `#(remove-subscriber ,pid)))
 
@@ -48,16 +42,6 @@
 
 (defun stop-bot ()
   'noop)
-
-(defun timestamp ()
-  (timestamp (now)))
-
-(defun timestamp (time)
-  (let* (((tuple (tuple year mon day)
-                 (tuple hour min sec)) (calendar:now_to_local_time time))
-         (stamp (io_lib:format "~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w"
-                               (list year mon day hour min sec))))
-    (list_to_binary stamp)))
 
 ;;;===================================================================
 ;;; API, but don't call; really for internal use
@@ -97,6 +81,9 @@
 ;;;===================================================================
 (defun message-subscriber (subscriber pid)
   'noop)
+
+(defun remove-subscriber (subscriber pid)
+  )
 
 (defun split-nick (nick)
   'noop)
