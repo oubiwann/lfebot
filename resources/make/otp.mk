@@ -1,5 +1,3 @@
-include common.mk
-
 dev: compile-no-deps
 	@echo "Running OTP app in the foreground ..."
 	@ERL_LIBS=$(ERL_LIBS) $(LFE) -eval "application:start('erlbot')" \
